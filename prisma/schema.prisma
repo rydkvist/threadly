@@ -1,21 +1,41 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
-    output   = "../generated/prisma"
+    provider = "prisma-client"
+    output   = "./.generated"
 }
 
 datasource db {
     provider = "sqlite"
-    url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model User {
+    id       Int                 @id @default(autoincrement())
+    username String              @unique
+    password String
+    threads  ThreadParticipant[]
+    messages Message[]
+}
 
-    @@index([name])
+model Thread {
+    id           Int                 @id @default(autoincrement())
+    participants ThreadParticipant[]
+    messages     Message[]
+    createdAt    DateTime            @default(now())
+}
+
+model ThreadParticipant {
+    id       Int    @id @default(autoincrement())
+    thread   Thread @relation(fields: [threadId], references: [id])
+    threadId Int
+    user     User   @relation(fields: [userId], references: [id])
+    userId   Int
+}
+
+model Message {
+    id        Int      @id @default(autoincrement())
+    text      String
+    thread    Thread   @relation(fields: [threadId], references: [id])
+    threadId  Int
+    sender    User     @relation(fields: [senderId], references: [id])
+    senderId  Int
+    createdAt DateTime @default(now())
 }
