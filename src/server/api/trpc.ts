@@ -7,8 +7,8 @@ import { db } from "~/server/db";
 import { parseAuthToken } from "../auth/parseAuthToken";
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const cookieStore = await cookies()
-  const token = cookieStore.get("authToken")?.value
+  const cookieStore = await cookies();
+  const token = cookieStore.get("authToken")?.value;
 
   const userId = parseAuthToken(token);
 
@@ -39,7 +39,7 @@ export const createTRPCRouter = t.router;
 
 const enforceAuthGuard = t.middleware(({ ctx, next }) => {
   if (!ctx.userId) {
-    throw new TRPCError({ code: "UNAUTHORIZED" })
+    throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
   return next({
@@ -47,9 +47,9 @@ const enforceAuthGuard = t.middleware(({ ctx, next }) => {
       ...ctx,
       userId: ctx.userId,
     },
-  })
-})
+  });
+});
 
-export const protectedProcedure = t.procedure.use(enforceAuthGuard)
+export const protectedProcedure = t.procedure.use(enforceAuthGuard);
 
 export const publicProcedure = t.procedure;

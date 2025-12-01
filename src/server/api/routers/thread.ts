@@ -1,49 +1,39 @@
-import { z } from "zod"
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc"
-import { TRPCError } from "@trpc/server"
+import { z } from "zod";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const threadRouter = createTRPCRouter({
-    getAll: protectedProcedure.query(async ({ ctx }) => {
-        return ctx.db.thread.findMany({
-            where: {
-                participants: {
-                    some: { userId: ctx.userId },
-                },
-            },
-            include: {
-                participants: {
-                    include: {
-                        user: true,
-                    },
-                },
-            },
-            orderBy: { createdAt: "desc" },
-        })
+  list: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.thread.findMany({
+      where: {
+        participants: {
+          some: { userId: ctx.userId },
+        },
+      },
+      include: {
+        participants: {
+          include: { user: true },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  }),
+  create: protectedProcedure
+    .input(z.object({ otherUsername: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const other = await ctx.db.user.findUnique({
+        where: { username: input.otherUsername },
+      });
+
+      if (!other) throw new Error("User not found");
+
+      const thread = await ctx.db.thread.create({
+        data: {
+          participants: {
+            create: [{ userId: ctx.userId }, { userId: other.id }],
+          },
+        },
+      });
+
+      return thread;
     }),
-    create: protectedProcedure
-        .input(
-            z.object({
-                username: z.string(),
-            })
-        )
-        .mutation(async ({ ctx, input }) => {
-            const otherUser = await ctx.db.user.findUnique({
-                where: { username: input.username },
-            })
-
-            if (!otherUser) {
-                throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
-            }
-
-            return await ctx.db.thread.create({
-                data: {
-                    participants: {
-                        create: [
-                            { userId: ctx.userId },
-                            { userId: otherUser.id },
-                        ],
-                    },
-                },
-            })
-        }),
-})
+});

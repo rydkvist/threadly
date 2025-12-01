@@ -1,13 +1,13 @@
-import "~/styles/globals.css"
+import "~/styles/globals.css";
 
-import { type Metadata } from "next"
-import { Inter } from "next/font/google"
-import { TRPCReactProvider } from "~/trpc/react"
+import { type Metadata } from "next";
+import { Inter } from "next/font/google";
+import { TRPCReactProvider } from "~/trpc/react";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-})
+});
 
 export const metadata: Metadata = {
   title: {
@@ -45,12 +45,12 @@ export const metadata: Metadata = {
     "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover",
 
   themeColor: "#ffffff",
-}
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en" className={inter.variable}>
@@ -58,5 +58,5 @@ export default function RootLayout({
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
-  )
+  );
 }
