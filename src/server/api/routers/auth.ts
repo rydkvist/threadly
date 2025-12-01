@@ -19,10 +19,26 @@ export const authRouter = createTRPCRouter({
                 throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid login" })
             }
 
-            // Ideally generate a JWT but simple is fine for this case
+            // Ideally we can generate a JWT but simple is fine for this case
             return {
                 token: `user-${user.id}`,
                 userId: user.id,
             }
         }),
+    createMockUser: publicProcedure
+        .input(z.object({
+            username: z.string(),
+            password: z.string(),
+        }))
+        .mutation(async ({ ctx, input }) => {
+            const user = await ctx.db.user.create({
+                data: input
+            })
+
+            return {
+                token: `user-${user.id}`,
+                userId: user.id,
+            }
+        }),
+
 })

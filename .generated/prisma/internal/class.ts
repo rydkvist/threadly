@@ -12,7 +12,7 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "./prismaNamespace.js"
+import type * as Prisma from "./prismaNamespace"
 
 
 const config: runtime.GetPrismaClientConfig = {
@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.0.1",
   "engineVersion": "f09f2815f091dbba658cdcd2264306d88bb5bda6",
   "activeProvider": "sqlite",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"./.generated\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n}\n\nmodel User {\n  id       Int                 @id @default(autoincrement())\n  username String              @unique\n  password String\n  threads  ThreadParticipant[]\n  messages Message[]\n}\n\nmodel Thread {\n  id           Int                 @id @default(autoincrement())\n  participants ThreadParticipant[]\n  messages     Message[]\n  createdAt    DateTime            @default(now())\n}\n\nmodel ThreadParticipant {\n  id       Int    @id @default(autoincrement())\n  thread   Thread @relation(fields: [threadId], references: [id])\n  threadId Int\n  user     User   @relation(fields: [userId], references: [id])\n  userId   Int\n}\n\nmodel Message {\n  id        Int      @id @default(autoincrement())\n  text      String\n  thread    Thread   @relation(fields: [threadId], references: [id])\n  threadId  Int\n  sender    User     @relation(fields: [senderId], references: [id])\n  senderId  Int\n  createdAt DateTime @default(now())\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../.generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n}\n\nmodel User {\n  id       Int                 @id @default(autoincrement())\n  username String              @unique\n  password String\n  threads  ThreadParticipant[]\n  messages Message[]\n}\n\nmodel Thread {\n  id           Int                 @id @default(autoincrement())\n  participants ThreadParticipant[]\n  messages     Message[]\n  createdAt    DateTime            @default(now())\n}\n\nmodel ThreadParticipant {\n  id       Int    @id @default(autoincrement())\n  thread   Thread @relation(fields: [threadId], references: [id])\n  threadId Int\n  user     User   @relation(fields: [userId], references: [id])\n  userId   Int\n}\n\nmodel Message {\n  id        Int      @id @default(autoincrement())\n  text      String\n  thread    Thread   @relation(fields: [threadId], references: [id])\n  threadId  Int\n  sender    User     @relation(fields: [senderId], references: [id])\n  senderId  Int\n  createdAt DateTime @default(now())\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
