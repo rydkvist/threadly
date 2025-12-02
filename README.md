@@ -45,7 +45,7 @@ This points Prisma to a local SQLite database file (`db.sqlite`), which Prisma w
 
 > Without this file, running npm install will fail with a Prisma initialization error.
 
-### 1. Install dependencies
+### 2. Install dependencies
 
 Once `.env` exists, install dependencies:
 
@@ -53,7 +53,7 @@ Once `.env` exists, install dependencies:
 npm install
 ```
 
-### 2. Setup database
+### 3. Setup database
 
 After installing dependencies, setup the local database:
 
@@ -63,7 +63,7 @@ npm run db:push
 
 This creates a local SQLite database (`db.sqlite`) based on the Prisma schemas.
 
-### 3. Start the development server (or run in preview mode)
+### 4. Start the development server (or run in preview mode)
 
 For development:
 ```sh
