@@ -1,4 +1,4 @@
-# Threadly
+  # Threadly
 
 A lightweight messaging app built with the following tech stack:
 * Next.js App Router
@@ -63,7 +63,7 @@ npm run db:push
 
 This creates a local SQLite database (`db.sqlite`) based on the Prisma schemas.
 
-### 4. Start the development server (or run in preview mode)
+### 3. Start the development server (or run in preview mode)
 
 For development:
 ```sh
