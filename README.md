@@ -34,30 +34,45 @@ This project implements the expected following functionality:
 
 # Running the project locally
 
+### 1. Create a .env file before running npm install
+In the project root, create an `.env` file with the following content:
+```sh
+DATABASE_URL="file:./db.sqlite"
+NEXT_PUBLIC_HOST_URL="http://localhost:3000"
+```
+
+This points Prisma to a local SQLite database file (`db.sqlite`), which Prisma will create automatically.
+
+> Without this file, running npm install will fail with a Prisma initialization error.
+
 ### 1. Install dependencies
+
+Once `.env` exists, install dependencies:
 
 ```sh
 npm install
 ```
 
-### 2. Generate the Prisma client
+### 2. Setup database
+
+After installing dependencies, setup the local database:
 
 ```sh
-npx prisma generate
+npm run db:push
 ```
 
-### 3. Create the database schema
+This creates a local SQLite database (`db.sqlite`) based on the Prisma schemas.
 
-```sh
-npx prisma db push
-```
+### 4. Start the development server (or run in preview mode)
 
-This creates a local SQLite database (`threadly.db`) based on the Prisma schema.
-
-### 4. Start the development server
-
+For development:
 ```sh
 npm run dev
+```
+
+For preview mode:
+```sh
+npm run preview
 ```
 
 The app will be available at:
@@ -66,12 +81,11 @@ The app will be available at:
 http://localhost:3000
 ```
 
-
 # Seeding demo users
 
 There is **no CLI seeding required**.
 
-You can seed everything from the login page:
+You can seed users from the login page:
 
 1. Open `http://localhost:3000`
 2. Press **“Seed 8 demo users”**
