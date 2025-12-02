@@ -16,6 +16,7 @@ type SidebarUIProps = {
 
 export function SidebarUI({ threads, pathname }: SidebarUIProps) {
   const me = useUser();
+
   return (
     <section className="flex h-full flex-col">
       <div className="border-b px-4 py-4">
@@ -52,7 +53,7 @@ export function SidebarUI({ threads, pathname }: SidebarUIProps) {
                     </Avatar>
                   ))}
                 </div>
-                <span>You and {thread.participants.filter((p) => p.userId === me.id).map((p) => p.user.username).join('')}</span>
+                <span>You and {thread.participants.filter((p) => p.userId !== me.id).map((p) => p.user.username).join('')}</span>
               </Link>
             </li>
           );

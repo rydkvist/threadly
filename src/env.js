@@ -8,13 +8,13 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
   },
-  client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
-  },
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    NEXT_PUBLIC_HOST_URL: process.env.NEXT_PUBLIC_HOST_URL,
+  },
+  client: {
+    NEXT_PUBLIC_HOST_URL: z.string().url(),
   },
   emptyStringAsUndefined: true,
 });

@@ -2,8 +2,6 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SidebarClient } from "../_components/messages/SidebarClient";
 import { parseAuthToken } from "~/server/auth/parseAuthToken";
-import { appRouter } from "~/server/api/root";
-import { db } from "~/server/db";
 import type { Metadata } from "next";
 import { api, HydrateClient } from "~/trpc/server";
 import { UserProvider } from "../providers/UserProvider";

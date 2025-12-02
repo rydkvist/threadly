@@ -13,7 +13,7 @@ import { getUserAvatar } from "~/lib/getUserAvatar";
 import { useUser } from "../providers/UserProvider";
 import { Spinner } from "../_components/ui/spinner";
 
-export default function MessagesIndexPage() {
+export default function MessagesIndexPage(_: PageProps<'/messages'>) {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const me = useUser();
@@ -65,8 +65,8 @@ export default function MessagesIndexPage() {
         </div>
       </section>
 
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Direct message someone</h2>
+      <section className="last:mb-4">
+        <h2 className="text-lg font-semibold mb-4">Direct message someone</h2>
 
         <Input
           placeholder="Search username…"
@@ -76,7 +76,7 @@ export default function MessagesIndexPage() {
         />
 
         {search.length > 0 && (
-          <ul className="mt-2 max-w-sm space-y-2 rounded-md border bg-white p-4 shadow-sm">
+          <ul className="mt-2 absolute z-10 w-full max-w-sm space-y-2 rounded-md border bg-white p-4 shadow-sm">
             {filteredUsers.length === 0 && (
               <p className="text-sm text-gray-500">No users found</p>
             )}
@@ -85,7 +85,7 @@ export default function MessagesIndexPage() {
               <li key={user.id}>
                 <button
                   onClick={() => startThread(user.username)}
-                  className="flex w-full items-center gap-3 rounded-md p-2 text-left transition hover:bg-gray-100"
+                  className="flex w-full items-center gap-3 cursor-pointer border rounded-md p-2 text-left transition hover:bg-gray-100"
                 >
                   <Avatar className="size-10">
                     <AvatarImage

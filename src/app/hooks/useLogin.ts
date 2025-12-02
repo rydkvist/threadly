@@ -12,7 +12,7 @@ export function useLogin() {
   const [error, setError] = useState<string | null>(null);
 
   const loginMutation = api.auth.login.useMutation();
-  const createMockUserMutation = api.auth.createMockUser.useMutation();
+  const createUserMutation = api.user.create.useMutation();
 
   async function login(username: string, password: string) {
     setLoading(true);
@@ -22,28 +22,27 @@ export function useLogin() {
       const result = await loginMutation.mutateAsync({ username, password });
       await setAuthCookie(result.token);
       router.push("/messages");
-    } catch (err: any) {
-      setError(err?.message ?? "Login failed");
+    } catch {
+      setError("Login failed");
     } finally {
       setLoading(false);
     }
   }
 
-  async function createMockUser() {
+  async function createUser(username: string, password: string) {
     setLoading(true);
     setError(null);
 
     try {
-      const mockUsername = `user${Math.floor(Math.random() * 9000)}`;
-      const result = await createMockUserMutation.mutateAsync({
-        username: mockUsername,
-        password: "pass123",
+      const result = await createUserMutation.mutateAsync({
+        username: username,
+        password: password,
       });
 
       await setAuthCookie(result.token);
       router.push("/messages");
-    } catch (err: any) {
-      setError("Could not create mock user");
+    } catch {
+      setError("Could not create user");
     } finally {
       setLoading(false);
     }
@@ -51,7 +50,7 @@ export function useLogin() {
 
   return {
     login,
-    createMockUser,
+    createUser,
     loading,
     error,
   };
