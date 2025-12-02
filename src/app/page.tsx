@@ -1,55 +1,54 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "~/app/_components/ui/button"
+import { useState } from "react";
+import { Button } from "~/app/_components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "~/app/_components/ui/card"
-import { Input } from "~/app/_components/ui/input"
-import { Label } from "~/app/_components/ui/label"
-import { useLogin } from "./hooks/useLogin"
-import { CreateAccountDialog } from "./_components/messages/CreateAccountDialogue"
+} from "~/app/_components/ui/card";
+import { Input } from "~/app/_components/ui/input";
+import { Label } from "~/app/_components/ui/label";
+import { useLogin } from "./hooks/useLogin";
+import { CreateAccountDialog } from "./_components/messages/CreateAccountDialogue";
 
-export default function LoginPage(_: PageProps<'/'>) {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [dialogOpen, setDialogOpen] = useState(false)
+export default function LoginPage(_: PageProps<"/">) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const { login, createUser, loading, error } = useLogin()
+  const { login, createUser, loading, error } = useLogin();
 
-  const [seedLoading, setSeedLoading] = useState(false)
-  const [seedMessage, setSeedMessage] = useState("")
+  const [seedLoading, setSeedLoading] = useState(false);
+  const [seedMessage, setSeedMessage] = useState("");
 
   async function handleLogin(e: React.FormEvent) {
-    e.preventDefault()
-    await login(username, password)
+    e.preventDefault();
+    await login(username, password);
   }
 
   async function handleCreateUserDialog(username: string, password: string) {
-    await createUser(username, password)
+    await createUser(username, password);
   }
 
   async function handleSeed() {
-    setSeedLoading(true)
-    setSeedMessage("")
+    setSeedLoading(true);
+    setSeedMessage("");
 
     try {
-      await fetch("/api/dev/seed", { method: "POST" })
-      setSeedMessage("Done")
+      await fetch("/api/dev/seed", { method: "POST" });
+      setSeedMessage("Done");
     } catch {
-      setSeedMessage("Failed to seed or you already have demo users 😁")
+      setSeedMessage("Failed to seed or you already have demo users 😁");
     } finally {
-      setSeedLoading(false)
+      setSeedLoading(false);
     }
   }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
-
       <div className="mb-6 flex flex-col items-center">
         <h1 className="text-3xl font-semibold tracking-tight">Threadly</h1>
         <p className="text-muted-foreground text-sm">Simple messaging</p>
@@ -117,9 +116,10 @@ export default function LoginPage(_: PageProps<'/'>) {
             </Button>
           </div>
 
-
           {seedMessage && (
-            <p className="mt-1 text-center text-xs text-gray-600">{seedMessage}</p>
+            <p className="mt-1 text-center text-xs text-gray-600">
+              {seedMessage}
+            </p>
           )}
         </CardContent>
       </Card>
@@ -131,5 +131,5 @@ export default function LoginPage(_: PageProps<'/'>) {
         loading={loading}
       />
     </div>
-  )
+  );
 }

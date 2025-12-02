@@ -1,8 +1,10 @@
 import { ChatWindow } from "~/app/_components/messages/ChatWindow";
 import { MessageInput } from "~/app/_components/messages/MessageInput";
 
-export default async function ThreadPage(props: PageProps<'/messages/[threadId]'>) {
-  const { threadId } = await props.params
+export default async function ThreadPage(
+  props: PageProps<"/messages/[threadId]">,
+) {
+  const { threadId } = await props.params;
   const threadIdNum = Number(threadId);
 
   return (

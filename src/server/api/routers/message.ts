@@ -16,7 +16,7 @@ export const messageRouter = createTRPCRouter({
             },
           },
         },
-      })
+      });
     }),
   send: protectedProcedure
     .input(

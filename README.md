@@ -1,39 +1,163 @@
 # Threadly
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A lightweight messaging app built with the following tech stack:
+* Next.js App Router
+* React (client and server components)
+* tRPC (type-safe API between client and server)
+* Prisma + SQLite
+* Tailwind CSS
+* shadcn/ui
+* Server actions for authentication flow
 
-## What's next? How do I make an app with this?
+# Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+This project implements the expected following functionality:
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### 1. Login
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+* Users can sign in with a username and password
+* A simple flow for creating an account is available from the login page
 
-## Learn More
+### 2. Messaging
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+* Users see a list of their message threads
+* Users can start a new thread with any existing user
+* Each thread shows messages in chronological order
+* The newest message always appears at the bottom
+* Messages update automatically without refreshing the page (via polling)
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### 3. Setup instructions
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+* The README includes steps on how to run the project locally
+* The app provides a built-in seed mechanism to generate demo users
 
-## How do I deploy this?
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+# Running the project locally
 
-# Implementation approachs
+### 1. Install dependencies
 
-- Using Next.js to facilitate setting up an end-to-end full-stack app. I would revisit this in the aspect of scaling and setup a Node.js backend instead, to  would like to implement a clearer separation of concerns for developers working between the frontend and the backend.
-  - Login page is client-side driven to speed up the building of this app. A more performant approach could be to have a hybrid where as much as resonable is rendered on the server, and keep the client-side JS code minimal so the user has less JS to load on their browser and receive a faster time to interactive (TTI) experience. Rendering UI on the server helps also minimizing the UI layout shifts for the user when loading the page.
-  - Using OpenAI's GPT 5.1 model to speed-up building the UI flows and focus on the integration itself.
-- Using shadcn to speed up the process of building the UI components, it integrates well with an App Router Next.js app where the components have server components support out of the box, and have the "use client" directive by default on client components. It also provides many accessibility (A11Y) attributes of the box, keeping the app compliant to the WCAG 2.1 AA standard (EU directive from June 2025).
-- Using SQLite as my RDBMS since it's a lightweight approach that doesn't require setting up any infrastructure for the scope of this application.
-- From a domain aspect, I'll be using "/messages" as the user front-facing domain, rather than /threads that seems more technical. This can help keep a better separation between "Message" and "Thread" models on the backend.
-- We may have to keep the messages root page using the "use client" directive to allow for a more real-time experience on live updates from other chats
+```sh
+npm install
+```
+
+### 2. Generate the Prisma client
+
+```sh
+npx prisma generate
+```
+
+### 3. Create the database schema
+
+```sh
+npx prisma db push
+```
+
+This creates a local SQLite database (`threadly.db`) based on the Prisma schema.
+
+### 4. Start the development server
+
+```sh
+npm run dev
+```
+
+The app will be available at:
+
+```
+http://localhost:3000
+```
+
+
+# Seeding demo users
+
+There is **no CLI seeding required**.
+
+You can seed everything from the login page:
+
+1. Open `http://localhost:3000`
+2. Press **“Seed 8 demo users”**
+3. Eight demo users will be created, all with password `12345`
+
+### Accounts created (examples)
+
+```
+alice / 12345
+bob / 12345
+charlie / 12345
+diana / 12345
+eric / 12345
+… and a few more
+```
+
+# Testing the app with 2 users
+
+A good way to test exchanging messages between 2 users:
+
+1. Visit start page and click the button "**Seed 8 demo users**"
+2. Log in as **Alice** (*or with your own account*) in your main browser
+3. Start a thread with **Bob**
+4. Open an incognito window
+5. Log in as **Bob**
+6. Exchange messages between the two windows
+
+This demonstrates threads, participants, and polling-based live message updates.
+
+# Rationale behind stack
+
+### Next.js (App Router)
+
+Used to quickly deliver both the frontend and backend in one project. Since this was a time-boxed assignment, the built-in server components, file-based routing and server actions helped move faster.
+
+### React + TypeScript + Tailwind
+
+Covers the required frontend stack and enables quick UI iteration with strict typing
+
+### shadcn/ui
+
+Used purely for speed. It provides accessible and pre-styled components that work well with App Router, letting me focus on the features rather than styling.
+
+### tRPC
+
+Chosen to satisfy the requirement for an end-to-end type-safe API between backend and frontend. tRPC removes API schema duplication, speeds up iteration and provides excellent developer experience for small to medium services.
+
+### SQLite (Prisma ORM)
+
+The assignment requires an RDBMS, and SQLite is the most lightweight database that requires no infrastructure, no Docker and no external services. I think it's great for a local-only demo. In real deployments I would pick Postgres.
+
+### Prisma
+
+Good developer experience for modeling relational data quickly. Also made the seeding simple
+
+### Polling for “real-time” feel
+
+The requirements ask for new messages to appear without refreshing the page.
+Polling is pragmatic for this assignment because it avoids the additional infrastructure needed for WebSockets in App Router (which I attempted at first and abandoned after figuring out that it would require more than 5 hours *hehe*...). It still delivers a responsive experience.
+
+
+# Implementation approaches
+
+* I used Next.js App Router to move quickly and keep both backend and frontend logic in one place. For a real production service I would separate a dedicated Node backend and have Next.js focus on frontend delivery. This creates cleaner boundaries between domains and makes scaling easier.
+
+* The login flow uses client components for simplicity. In a production environment I would lean on hybrid rendering, where most UI is server-rendered and only interactive elements run client-side. This keeps JavaScript bundles smaller and improves page load performance.
+
+* I used OpenAI’s GPT 5.1 model as a coding assistant for generating UI scaffolding so I could focus on wiring the app together, messaging logic and data flows.
+
+* shadcn/ui was used to speed up development of accessible and consistent UI components. It integrates well with App Router conventions and helps maintain WCAG 2.1 AA accessibility standards with minimal overhead.
+
+* SQLite was chosen for convenience and simplicity since this assignment runs fully locally. For a multi-user production environment I would migrate to Postgres.
+
+* The backend domain uses separate Thread and Message models. The UI uses `/messages` as the user-facing route instead of `/threads` to keep the terminology more intuitive for users while still maintaining a clean domain model internally.
+
+* Real-time updates use a polling approach. I started with WebSockets but switched to polling because socket support with App Router adds infrastructure requirements and would have required more time to implement cleanly.
+
+* Authentication uses server actions so the server can set httpOnly cookies without exposing additional API routes. This keeps the flow secure and lightweight.
+
+# Future improvements
+
+If continuing the project, I would explore:
+
+* Migrating from polling to WebSockets or server-sent events for true real-time communication
+* Adding optimistic UI updates for chat input
+* Look into optimizing requests so similar date is re-utilized between components
+* Improving error handling and form validation
+* Introducing unit and integration tests for critical flows
+* Persisting user presence indicators (online, typing etc)

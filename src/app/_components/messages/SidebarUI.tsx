@@ -38,7 +38,7 @@ export function SidebarUI({ threads, pathname }: SidebarUIProps) {
               <Link
                 href={`/messages/${thread.id}`}
                 className={cn(
-                  "block w-full cursor-pointer border rounded-md px-3 py-2 text-left text-sm transition hover:bg-gray-100",
+                  "block w-full cursor-pointer rounded-md border px-3 py-2 text-left text-sm transition hover:bg-gray-100",
                   active && "bg-gray-100 font-medium",
                 )}
               >
@@ -53,7 +53,13 @@ export function SidebarUI({ threads, pathname }: SidebarUIProps) {
                     </Avatar>
                   ))}
                 </div>
-                <span>You and {thread.participants.filter((p) => p.userId !== me.id).map((p) => p.user.username).join('')}</span>
+                <span>
+                  You and{" "}
+                  {thread.participants
+                    .filter((p) => p.userId !== me.id)
+                    .map((p) => p.user.username)
+                    .join("")}
+                </span>
               </Link>
             </li>
           );
