@@ -130,34 +130,4 @@ Good developer experience for modeling relational data quickly. Also made the se
 ### Polling for “real-time” feel
 
 The requirements ask for new messages to appear without refreshing the page.
-Polling is pragmatic for this assignment because it avoids the additional infrastructure needed for WebSockets in App Router (which I attempted at first and abandoned after figuring out that it would require more than 5 hours *hehe*...). It still delivers a responsive experience.
-
-
-# Implementation approaches
-
-* I used Next.js App Router to move quickly and keep both backend and frontend logic in one place. For a real production service I would separate a dedicated Node backend and have Next.js focus on frontend delivery. This creates cleaner boundaries between domains and makes scaling easier.
-
-* The login flow uses client components for simplicity. In a production environment I would lean on hybrid rendering, where most UI is server-rendered and only interactive elements run client-side. This keeps JavaScript bundles smaller and improves page load performance.
-
-* I used OpenAI’s GPT 5.1 model as a coding assistant for generating UI scaffolding so I could focus on wiring the app together, messaging logic and data flows.
-
-* shadcn/ui was used to speed up development of accessible and consistent UI components. It integrates well with App Router conventions and helps maintain WCAG 2.1 AA accessibility standards with minimal overhead.
-
-* SQLite was chosen for convenience and simplicity since this assignment runs fully locally. For a multi-user production environment I would migrate to Postgres.
-
-* The backend domain uses separate Thread and Message models. The UI uses `/messages` as the user-facing route instead of `/threads` to keep the terminology more intuitive for users while still maintaining a clean domain model internally.
-
-* Real-time updates use a polling approach. I started with WebSockets but switched to polling because socket support with App Router adds infrastructure requirements and would have required more time to implement cleanly.
-
-* Authentication uses server actions so the server can set httpOnly cookies without exposing additional API routes. This keeps the flow secure and lightweight.
-
-# Future improvements
-
-If continuing the project, I would explore:
-
-* Migrating from polling to WebSockets or server-sent events for true real-time communication
-* Adding optimistic UI updates for chat input
-* Look into optimizing requests so similar date is re-utilized between components
-* Improving error handling and form validation
-* Introducing unit and integration tests for critical flows
-* Persisting user presence indicators (online, typing etc)
+Polling is pragmatic for this assignment because it avoids the additional infrastructure needed for WebSockets in App Router (which I attempted at first and abandoned after figuring out that it would require more than 5 hours... 😅). It still delivers a responsive experience.
